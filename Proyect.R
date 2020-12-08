@@ -121,16 +121,15 @@ f#or(l in 1:(length(vector_RR)-3)){
 
 
 #MED CRITERIA
-MED=  3.32*(IQR(vector_RR)/2)
-MAD=(mean(vector_RR)-2.9*(IQR(vector_RR)/2))/3
-for(e in 1:(length(vector_RR)-3)){
-  beat_evaluated_2= vector_RR[e+1]
-  if(abs(vector_RR[e+2]-beat_evaluated)<MED){
-    if(abs(beat_evaluated-vector_RR[e])<MED){
-      vector_flags[e+1]<-"ON"
-    }
-  }
-}
+#MED=  3.32*(IQR(vector_RR)/2)
+#for(e in 1:(length(vector_RR)-3)){
+#  beat_evaluated_2= vector_RR[e+1]
+ # if(abs(vector_RR[e+2]-beat_evaluated)<MED){
+ #   if(abs(beat_evaluated-vector_RR[e])<MED){
+ #     vector_flags[e+1]<-"ON"
+ #   }
+  #}
+#}
 
 
 
