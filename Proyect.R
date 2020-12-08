@@ -168,15 +168,6 @@ PlotNIHR(hrv.data)
 points(hrv.data$Beat$Time[ vector_solo_ON + 1], 
        hrv.data$Beat$niHR[ vector_solo_ON + 1], col='red', bg='red', pch=22)
 
-vector_filtrados <- vector_tiempos$V1[-vector_solo_ON]
-write.table(vector_filtrados, file="vector_Filtrados.txt", row.names = FALSE, col.names = FALSE)
-hrv.data = LoadBeatAscii(hrv.data, "vector_Filtrados.txt",RecordPath = "." )
 
-hrv.data = BuildNIHR(hrv.data)
-windows()
-PlotNIHR(hrv.data)
-#Una vez que ya hayamos filtrado por si se quiere modificar algo más
-windows()
-hrv.data= EditNIHR(hrv.data)
 
 
