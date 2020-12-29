@@ -20,7 +20,7 @@ for(a in 1:length(vector_tiempos$V1)-1){
 #Me interesa crear cuantiles para saber cuanto va a poder variar mis R-R
 #Para ello miro la diferencia entre latidos
 vector_RR <- diff(vector_tiempos$V1)*1000
-vector_flags=final_flags=rep('',length(vector_RR))
+vector_flags=final_flags=rep('0',length(vector_RR))
 
 
 #Ahora que tengo el vector_RR que contiene el tiempo que transcurre entre los
@@ -31,22 +31,21 @@ vector_flags=final_flags=rep('',length(vector_RR))
 #MAD=SEB/3
 Criteria= ((mean(vector_RR)-2.9*(IQR(vector_RR)/2))/3+3.32*(IQR(vector_RR)/2))/2
 
-
+MED=  3.32*(IQR(vector_RR)/2)
 
 #Algoritmo de bertson (pag 594,595,596)
-
 l <- NULL
 for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
   if(abs(beat_evaluated-vector_RR[l+2])>Criteria){
-    vector_flags[l+1] <-("ON")
+    vector_flags[l+1] <-("1")
     if(abs(beat_evaluated-vector_RR[l])<Criteria){
       if(beat_evaluated-vector_RR[l+2]<0){
         if(abs(vector_RR[l+2]-vector_RR[l+3])<Criteria){
           x <- beat_evaluated/2
-          if(x-vector_RR[l+2]<(-Criteria) && x-vector_RR[l]<(-Criteria)){
+         if(x-vector_RR[l+2]<(-Criteria) && x-vector_RR[l]<(-Criteria)){
             final_flags[l+1] <- ("ON")
-            vector_flags[l+1]<-("OFF")
+           vector_flags[l+1]<-("0")
           }
         }else{final_flags[l+1]<- "Can not evaluate"}
         
@@ -57,79 +56,29 @@ for(l in 1:(length(vector_RR)-3)){
           }else{ x2= vector_RR[l+2]+beat_evaluated}
           if(x2-vector_RR[l]>Criteria && x2-vector_RR[l+2]>Criteria){
             final_flags[l+1] <-"ON"
-            vector_flags[l+1] <-"OFF"
+            vector_flags[l+1] <-"0"
           }
-        }else{ final_flags[l+1] <- "Can not evaluate"}
-      }
+       }else{ final_flags[l+1] <- "Can not evaluate"}
+    }
     }else{ final_flags[l+1]<- "Can not evaluate"}
-  }else{ vector_flags[l+1]<-("Normal")}
-  
+  }else{ vector_flags[l+1]<-("0")}
   
 }
-
-#Segundo algoritmo de bernston que filtra más
-#l <- NULL
-f#or(l in 1:(length(vector_RR)-3)){
- # beat_evaluated = vector_RR[l+1]
- # if(abs(beat_evaluated-vector_RR[l+2])>Criteria){
- #   vector_flags[l+1] <-("ON")
- # }else{ vector_flags[l+1]<-("Normal")}
-#}
-
-#vector_solo_ON =which(vector_flags=="ON")
-
-
-#for(l in 1:(length(vector_solo_ON)-3)){
-#  for(z in 1:(length(vector_solo_ON)-3)){
-#    if(vector_solo_ON[z]==l){
-#      beat_evaluated=vector_RR[l+1]
-#      if(abs(beat_evaluated-vector_RR[l])<Criteria){
-#        if(beat_evaluated-vector_RR[l+2]<0){
-#          if(abs(vector_RR[l+2]-vector_RR[l+3])<Criteria){
-#            x <- beat_evaluated/2
-#            if(x-vector_RR[l+2]<(-Criteria) && x-vector_RR[l]<(-Criteria)){
-#              final_flags[l+1] <- ("ON")
-#              vector_flags[l+1]<-("OFF")
-#            }
-#          }else{final_flags[l+1]<- "Can not evaluate"}
-          
-#        }
-#      }else{ final_flags[l+1]<- "Can not evaluate"}
-#    }
-#  }
-#}
-#for(l in 1:(length(vector_solo_ON)-3)){
-#  for(o in 1:(length(vector_solo_ON)-3)){
-#    if(vector_solo_ON[l]==l){
-#      beat_evaluated=vector_RR[l+1]
-#      if(abs(beat_evaluated-vector_RR[l])<Criteria){
-#         if(beat_evaluated-vector_RR[l+2]>0){
-#          if(abs(vector_RR[l+2]-vector_RR[l+3])<Criteria){
-#            if(vector_RR[l]<vector_RR[l+2]){
-#              x2=vector_RR[l]+beat_evaluated
-#            }else{ x2= vector_RR[l+2]+beat_evaluated}
-#            if(x2-vector_RR[l]>Criteria && x2-vector_RR[l+2]>Criteria){
-#              final_flags[l+1] <-"ON"
-#              vector_flags[l+1] <-"OFF"
-#            }
-#          }else{ final_flags[l+1] <- "Can not evaluate"}
-#        }
-#      }else{ final_flags[l+1]<- "Can not evaluate"}
-#    }
-#  }
-#}
-
-
 #MED CRITERIA
-#MED=  3.32*(IQR(vector_RR)/2)
-#for(e in 1:(length(vector_RR)-3)){
-#  beat_evaluated_2= vector_RR[e+1]
- # if(abs(vector_RR[e+2]-beat_evaluated)<MED){
- #   if(abs(beat_evaluated-vector_RR[e])<MED){
- #     vector_flags[e+1]<-"ON"
- #   }
-  #}
-#}
+MED=  3.32*(IQR(vector_RR)/2)
+#MAD=(mean(vector_RR)-2.9*(IQR(vector_RR)/2))/3
+l<-NULL
+for(l in 1:(length(vector_RR)-3)){
+  beat_evaluated = vector_RR[l+1]
+  if((beat_evaluated-vector_RR[l])<0){
+    if((beat_evaluated-vector_RR[l+2])<(-MED)){
+      if(vector_RR[l+2]-vector_RR[l+3]>MED){
+      vector_flags[l+1]<-"1"
+      }
+    }
+  }
+}
+
 
 
 
@@ -141,7 +90,7 @@ write.table(tabla_datos, file="Tabla_Filtrados2.txt")
 
 #Aqui estoy intentando extraer las posiciones en las que se encuentran los 
 #beats marcados para filtrar
-vector_solo_ON =which(vector_flags=="ON")
+vector_solo_ON =which(vector_flags=="1")
 
 #Imprimir el grafico marcando las flags
 #install.packages("Rtools")
@@ -167,6 +116,24 @@ PlotNIHR(hrv.data)
 points(hrv.data$Beat$Time[ vector_solo_ON + 1], 
        hrv.data$Beat$niHR[ vector_solo_ON + 1], col='red', bg='red', pch=22)
 
+#Matriz de confusion
+install.packages('yardstick')
+library('yardstick')
+file_name_anotaciones = "113_Annotations.txt"
+tabla_real = read.table(file_name_anotaciones, header =TRUE)
+truth_filtrados_vector<-c()
+m<-null
+for(m in 1:length(truth_filtrados)){
+  if((tabla_real$TYPE[m]== "N")|(tabla_real$TYPE[m]=="A")|(tabla_real$TYPE[m]=="F")){
+    truth_filtrados_vector[m]<- "0"
+  }else{
+    truth_filtrados_vector[m]<-"1"
+  }
+}
+#tabla_anotaciones = read.table('Tabla_Filtrados2.txt', header =TRUE)
+estimate_filtrados <- vector_flags[1:1794]
+df = data.frame('reference' = factor(truth_filtrados_vector), 'predictions' = factor(estimate_filtrados))
+conf_mat(df, truth = reference, estimate = predictions)
 
 
 
