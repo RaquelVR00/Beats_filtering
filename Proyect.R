@@ -123,7 +123,7 @@ file_name_anotaciones = "113_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
 truth_filtrados_vector<-c()
 m<-null
-for(m in 1:length(truth_filtrados)){
+for(m in 1:length(tabla_real$TYPE)){
   if((tabla_real$TYPE[m]== "N")|(tabla_real$TYPE[m]=="A")|(tabla_real$TYPE[m]=="F")){
     truth_filtrados_vector[m]<- "0"
   }else{
@@ -131,7 +131,7 @@ for(m in 1:length(truth_filtrados)){
   }
 }
 #tabla_anotaciones = read.table('Tabla_Filtrados2.txt', header =TRUE)
-estimate_filtrados <- vector_flags[1:1794]
+estimate_filtrados <- vector_flags[1:length(truth_filtrados_vector)]
 df = data.frame('reference' = factor(truth_filtrados_vector), 'predictions' = factor(estimate_filtrados))
 conf_mat(df, truth = reference, estimate = predictions)
 
