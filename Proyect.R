@@ -5,7 +5,7 @@ setwd("C:/Users/RAQUEL/Desktop/RHRV")
 file_name = "113_times.txt"
 vector_tiempos <- read.table(file_name, header =FALSE)
 
-#Funcion que pasa el tiempo a formato MM:ss:mm 
+#Función que pasa el tiempo a formato MM:ss:mm 
 time_format <- c(length(vector_tiempos$V1))
 for(a in 1:length(vector_tiempos$V1)-1){
   minute = (vector_tiempos$V1[a])/60
@@ -66,13 +66,13 @@ for(l in 1:(length(vector_RR)-3)){
 }
 
 
-#Algortimopara detectar latidos prematuros
+#Algortimo para detectar latidos prematuros
 l<-NULL
 for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
-  #Si el latido es prematuro el RR sera corto respecto al siguiente
+  #Si el latido es prematuro el RR será corto respecto al siguiente
   if((beat_evaluated-vector_RR[l+2])<(-MED)){
-    #Si el latido es prematuro el RR sera corto respecto al anterior
+    #Si el latido es prematuro el RR será corto respecto al anterior
   if((beat_evaluated-vector_RR[l])<(-MED)){
       #Si es prematuro, el siguiente RR tendrá una pausa compensatoria por lo que
       #tendrá más duración de la normal
@@ -91,15 +91,15 @@ for(l in 1:(length(vector_RR)-3)){
 
 #Tabla que contiene los resultados
 tabla_datos = data.frame(time_format,vector_RR,vector_flags,final_flags)
-write.table(tabla_datos, file="Tabla_Filtrados2.txt")
+write.table(tabla_datos, file="Tabla_Filtrados.txt")
 
 
 
-#Aqui estoy intentando extraer las posiciones en las que se encuentran los 
-#beats marcados para filtrar
+#Aquí estoy intentando extraer las posiciones en las que se encuentran los 
+#latidos marcados para filtrar
 vector_solo_ON =which(vector_flags=="1")
 
-#Imprimir el grafico marcando las flags
+#Imprimir el gráfico marcando las flags
 #install.packages("Rtools")
 #install.packages("RHRV")
 
@@ -123,7 +123,7 @@ PlotNIHR(hrv.data)
 points(hrv.data$Beat$Time[ vector_solo_ON + 1], 
        hrv.data$Beat$niHR[ vector_solo_ON + 1], col='red', bg='red', pch=22)
 
-#Matriz de confusion
+#Matriz de confusión
 #install.packages('yardstick')
 library('yardstick')
 file_name_anotaciones = "113_Annotations.txt"
@@ -137,7 +137,7 @@ for(m in 1:length(tabla_real$TYPE)){
     truth_filtrados_vector[m]<-"1"
   }
 }
-#tabla_anotaciones = read.table('Tabla_Filtrados2.txt', header =TRUE)
+
 estimate_filtrados <- vector_flags[1:length(truth_filtrados_vector)]
 df = data.frame('reference' = factor(truth_filtrados_vector), 'predictions' = factor(estimate_filtrados))
 Matriz_confusion = conf_mat(df, truth = reference, estimate = predictions)
