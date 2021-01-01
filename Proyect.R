@@ -64,18 +64,25 @@ for(l in 1:(length(vector_RR)-3)){
   }else{ vector_flags[l+1]<-("0")}
   
 }
-#MED CRITERIA
-MED=  3.32*(IQR(vector_RR)/2)
-#MAD=(mean(vector_RR)-2.9*(IQR(vector_RR)/2))/3
+
+
+#Algortimopara detectar latidos prematuros
 l<-NULL
 for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
-  if((beat_evaluated-vector_RR[l])<0){
-    if((beat_evaluated-vector_RR[l+2])<(-MED)){
-      if(vector_RR[l+2]-vector_RR[l+3]>MED){
+  #Si el latido es prematuro el RR sera corto respecto al siguiente
+  if((beat_evaluated-vector_RR[l+2])<(-MED)){
+    #Si el latido es prematuro el RR sera corto respecto al anterior
+  if((beat_evaluated-vector_RR[l])<(-MED)){
+      #Si es prematuro, el siguiente RR tendrá una pausa compensatoria por lo que
+      #tendrá más duración de la normal
+      if(vector_RR[l+2]-vector_RR[l+3]>Criteria){
       vector_flags[l+1]<-"1"
+      final_flags[l+1]<-" "
       }
     }
+  }else{
+    vector_flags[l+1]<-"0"
   }
 }
 
@@ -133,7 +140,9 @@ for(m in 1:length(tabla_real$TYPE)){
 #tabla_anotaciones = read.table('Tabla_Filtrados2.txt', header =TRUE)
 estimate_filtrados <- vector_flags[1:length(truth_filtrados_vector)]
 df = data.frame('reference' = factor(truth_filtrados_vector), 'predictions' = factor(estimate_filtrados))
-conf_mat(df, truth = reference, estimate = predictions)
+Matriz_confusion = conf_mat(df, truth = reference, estimate = predictions)
+Matriz_confusion
+
 
 
 
