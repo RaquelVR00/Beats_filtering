@@ -124,7 +124,7 @@ points(hrv.data$Beat$Time[ vector_solo_ON + 1],
        hrv.data$Beat$niHR[ vector_solo_ON + 1], col='red', bg='red', pch=22)
 
 #Matriz de confusion
-install.packages('yardstick')
+#install.packages('yardstick')
 library('yardstick')
 file_name_anotaciones = "113_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
