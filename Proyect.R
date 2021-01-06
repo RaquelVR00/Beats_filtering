@@ -129,7 +129,7 @@ library('yardstick')
 file_name_anotaciones = "113_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
 truth_filtrados_vector<-c()
-m<-null
+m<-NULL
 for(m in 1:length(tabla_real$TYPE)){
   if((tabla_real$TYPE[m]== "N")|(tabla_real$TYPE[m]=="A")|(tabla_real$TYPE[m]=="F")){
     truth_filtrados_vector[m]<- "0"
