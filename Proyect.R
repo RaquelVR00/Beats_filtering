@@ -2,7 +2,7 @@ library("lubridate")
 
 setwd("C:/Users/RAQUEL/Desktop/RHRV")
 
-file_name = "113_times.txt"
+file_name = "112_times.txt"
 vector_tiempos <- read.table(file_name, header =FALSE)
 
 #Función que pasa el tiempo a formato MM:ss:mm 
@@ -115,7 +115,7 @@ data("HRVProcessedData")
 
 hrv.data = CreateHRVData()
 hrv.data = SetVerbose(hrv.data, TRUE )
-hrv.data = LoadBeatAscii(hrv.data, "113_times.txt",RecordPath = "." )
+hrv.data = LoadBeatAscii(hrv.data, "112_times.txt",RecordPath = "." )
 hrv.data= BuildNIHR(hrv.data)
 
 windows()
@@ -126,7 +126,7 @@ points(hrv.data$Beat$Time[ vector_solo_ON + 1],
 #Matriz de confusión
 #install.packages('yardstick')
 library('yardstick')
-file_name_anotaciones = "113_Annotations.txt"
+file_name_anotaciones = "112_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
 truth_filtrados_vector<-c()
 m<-NULL
@@ -139,7 +139,7 @@ for(m in 1:length(tabla_real$TYPE)){
 }
 
 estimate_filtrados <- vector_flags[1:length(truth_filtrados_vector)]
-df = data.frame('reference' = factor(truth_filtrados_vector), 'predictions' = factor(estimate_filtrados))
+df = data.frame('reference' = factor(truth_filtrados_vector, levels=c('0','1')), 'predictions' = factor(estimate_filtrados,levels=c('0','1')))
 Matriz_confusion = conf_mat(df, truth = reference, estimate = predictions)
 Matriz_confusion
 
