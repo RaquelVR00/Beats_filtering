@@ -1,8 +1,8 @@
 library("lubridate")
 
-setwd("C:/Users/RAQUEL/Desktop/RHRV")
+setwd("C:/Users/RAQUEL/Desktop/RHRV/Files")
 
-file_name = "112_times.txt"
+file_name = "234_times.txt"
 vector_tiempos <- read.table(file_name, header =FALSE)
 
 #Función que pasa el tiempo a formato MM:ss:mm 
@@ -44,7 +44,7 @@ for(l in 1:(length(vector_RR)-3)){
         if(abs(vector_RR[l+2]-vector_RR[l+3])<Criteria){
           x <- beat_evaluated/2
          if(x-vector_RR[l+2]<(-Criteria) && x-vector_RR[l]<(-Criteria)){
-            final_flags[l+1] <- ("ON")
+            final_flags[l+1] <- ("1")
            vector_flags[l+1]<-("0")
           }
         }else{final_flags[l+1]<- "Can not evaluate"}
@@ -55,7 +55,7 @@ for(l in 1:(length(vector_RR)-3)){
             x2=vector_RR[l]+beat_evaluated
           }else{ x2= vector_RR[l+2]+beat_evaluated}
           if(x2-vector_RR[l]>Criteria && x2-vector_RR[l+2]>Criteria){
-            final_flags[l+1] <-"ON"
+            final_flags[l+1] <-"1"
             vector_flags[l+1] <-"0"
           }
        }else{ final_flags[l+1] <- "Can not evaluate"}
@@ -67,20 +67,18 @@ for(l in 1:(length(vector_RR)-3)){
 
 
 #Algortimo para detectar latidos prematuros
+
 l<-NULL
 for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
-  #Si el latido es prematuro el RR será corto respecto al siguiente
-  if((beat_evaluated-vector_RR[l+2])<(-MED)){
-    #Si el latido es prematuro el RR será corto respecto al anterior
   if((beat_evaluated-vector_RR[l])<(-MED)){
-      #Si es prematuro, el siguiente RR tendrá una pausa compensatoria por lo que
-      #tendrá más duración de la normal
+  if((beat_evaluated-vector_RR[l+2])<(-MED)){
+  
       if(vector_RR[l+2]-vector_RR[l+3]>Criteria){
       vector_flags[l+1]<-"1"
       final_flags[l+1]<-" "
       }
-    }
+  }
   }else{
     vector_flags[l+1]<-"0"
   }
@@ -90,8 +88,9 @@ for(l in 1:(length(vector_RR)-3)){
 
 
 #Tabla que contiene los resultados
+name = paste("Tabla_filtrados_",file_name,".txt")
 tabla_datos = data.frame(time_format,vector_RR,vector_flags,final_flags)
-write.table(tabla_datos, file="Tabla_Filtrados.txt")
+write.table(tabla_datos, file= name)
 
 
 
@@ -115,7 +114,7 @@ data("HRVProcessedData")
 
 hrv.data = CreateHRVData()
 hrv.data = SetVerbose(hrv.data, TRUE )
-hrv.data = LoadBeatAscii(hrv.data, "112_times.txt",RecordPath = "." )
+hrv.data = LoadBeatAscii(hrv.data, file_name ,RecordPath = "." )
 hrv.data= BuildNIHR(hrv.data)
 
 windows()
@@ -126,7 +125,7 @@ points(hrv.data$Beat$Time[ vector_solo_ON + 1],
 #Matriz de confusión
 #install.packages('yardstick')
 library('yardstick')
-file_name_anotaciones = "112_Annotations.txt"
+file_name_anotaciones = "234_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
 truth_filtrados_vector<-c()
 m<-NULL
