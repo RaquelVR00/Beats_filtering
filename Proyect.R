@@ -2,7 +2,7 @@ library("lubridate")
 
 setwd("C:/Users/RAQUEL/Desktop/RHRV/Files")
 
-file_name = "234_times.txt"
+file_name = "101_times.txt"
 vector_tiempos <- read.table(file_name, header =FALSE)
 
 #Función que pasa el tiempo a formato MM:ss:mm 
@@ -31,7 +31,6 @@ vector_flags=final_flags=rep('0',length(vector_RR))
 #MAD=SEB/3
 Criteria= ((mean(vector_RR)-2.9*(IQR(vector_RR)/2))/3+3.32*(IQR(vector_RR)/2))/2
 
-MED=  3.32*(IQR(vector_RR)/2)
 
 #Algoritmo de bertson (pag 594,595,596)
 l <- NULL
@@ -43,9 +42,9 @@ for(l in 1:(length(vector_RR)-3)){
       if(beat_evaluated-vector_RR[l+2]<0){
         if(abs(vector_RR[l+2]-vector_RR[l+3])<Criteria){
           x <- beat_evaluated/2
-         if(x-vector_RR[l+2]<(-Criteria) && x-vector_RR[l]<(-Criteria)){
+          if(x-vector_RR[l+2]<(-Criteria) && x-vector_RR[l]<(-Criteria)){
             final_flags[l+1] <- ("1")
-           vector_flags[l+1]<-("0")
+            vector_flags[l+1]<-("0")
           }
         }else{final_flags[l+1]<- "Can not evaluate"}
         
@@ -58,13 +57,25 @@ for(l in 1:(length(vector_RR)-3)){
             final_flags[l+1] <-"1"
             vector_flags[l+1] <-"0"
           }
-       }else{ final_flags[l+1] <- "Can not evaluate"}
-    }
+        }else{ final_flags[l+1] <- "Can not evaluate"}
+      }
     }else{ final_flags[l+1]<- "Can not evaluate"}
   }else{ vector_flags[l+1]<-("0")}
   
 }
 
+vector_solo_Off =which(vector_flags=="0")
+l<-null
+vector_RR_2<-c()
+n=0
+for(l in 1:(length(vector_solo_Off))){
+  vector_RR_2[n]<-vector_RR[vector_solo_Off[l]]
+  n=n+1
+}
+
+Criteria= ((mean(vector_RR_2)-2.9*(IQR(vector_RR_2)/2))/3+3.32*(IQR(vector_RR_2)/2))/2
+
+MED=  3.32*(IQR(vector_RR_2)/2)
 
 #Algortimo para detectar latidos prematuros
 
@@ -72,13 +83,13 @@ l<-NULL
 for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
   if((beat_evaluated-vector_RR[l])<(-MED)){
-  if((beat_evaluated-vector_RR[l+2])<(-MED)){
-  
+    if((beat_evaluated-vector_RR[l+2])<(-MED)){
+      
       if(vector_RR[l+2]-vector_RR[l+3]>Criteria){
-      vector_flags[l+1]<-"1"
-      final_flags[l+1]<-" "
+        vector_flags[l+1]<-"1"
+        final_flags[l+1]<-" "
       }
-  }
+    }
   }else{
     vector_flags[l+1]<-"0"
   }
@@ -125,12 +136,12 @@ points(hrv.data$Beat$Time[ vector_solo_ON + 1],
 #Matriz de confusión
 #install.packages('yardstick')
 library('yardstick')
-file_name_anotaciones = "234_Annotations.txt"
+file_name_anotaciones = "101_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
 truth_filtrados_vector<-c()
 m<-NULL
 for(m in 1:length(tabla_real$TYPE)){
-  if((tabla_real$TYPE[m]== "N")|(tabla_real$TYPE[m]=="A")|(tabla_real$TYPE[m]=="F")){
+  if((tabla_real$TYPE[m]== "N")|(tabla_real$TYPE[m]=="F")){
     truth_filtrados_vector[m]<- "0"
   }else{
     truth_filtrados_vector[m]<-"1"
@@ -141,7 +152,6 @@ estimate_filtrados <- vector_flags[1:length(truth_filtrados_vector)]
 df = data.frame('reference' = factor(truth_filtrados_vector, levels=c('0','1')), 'predictions' = factor(estimate_filtrados,levels=c('0','1')))
 Matriz_confusion = conf_mat(df, truth = reference, estimate = predictions)
 Matriz_confusion
-
 
 
 
