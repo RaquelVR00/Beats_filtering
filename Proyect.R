@@ -2,7 +2,7 @@ library("lubridate")
 
 setwd("C:/Users/RAQUEL/Desktop/RHRV/Files")
 
-file_name = "101_times.txt"
+file_name = "100_times.txt"
 vector_tiempos <- read.table(file_name, header =FALSE)
 
 #Función que pasa el tiempo a formato MM:ss:mm 
@@ -65,7 +65,7 @@ for(l in 1:(length(vector_RR)-3)){
 }
 
 vector_solo_Off =which(vector_flags=="0")
-l<-null
+l<-NULL
 vector_RR_2<-c()
 n=0
 for(l in 1:(length(vector_solo_Off))){
@@ -76,6 +76,8 @@ for(l in 1:(length(vector_solo_Off))){
 Criteria= ((mean(vector_RR_2)-2.9*(IQR(vector_RR_2)/2))/3+3.32*(IQR(vector_RR_2)/2))/2
 
 MED=  3.32*(IQR(vector_RR_2)/2)
+vector_flags=final_flags=rep('0',length(vector_RR))
+
 
 #Algortimo para detectar latidos prematuros
 
@@ -84,11 +86,8 @@ for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
   if((beat_evaluated-vector_RR[l])<(-MED)){
     if((beat_evaluated-vector_RR[l+2])<(-MED)){
-      
-      if(vector_RR[l+2]-vector_RR[l+3]>Criteria){
         vector_flags[l+1]<-"1"
         final_flags[l+1]<-" "
-      }
     }
   }else{
     vector_flags[l+1]<-"0"
@@ -136,7 +135,7 @@ points(hrv.data$Beat$Time[ vector_solo_ON + 1],
 #Matriz de confusión
 #install.packages('yardstick')
 library('yardstick')
-file_name_anotaciones = "101_Annotations.txt"
+file_name_anotaciones = "100_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
 truth_filtrados_vector<-c()
 m<-NULL
