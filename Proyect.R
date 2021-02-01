@@ -2,7 +2,7 @@ library("lubridate")
 
 setwd("C:/Users/RAQUEL/Desktop/RHRV/Files")
 
-file_name = "100_times.txt"
+file_name = "113_times.txt"
 vector_tiempos <- read.table(file_name, header =FALSE)
 
 #Función que pasa el tiempo a formato MM:ss:mm 
@@ -33,6 +33,7 @@ Criteria= ((mean(vector_RR)-2.9*(IQR(vector_RR)/2))/3+3.32*(IQR(vector_RR)/2))/2
 
 
 #Algoritmo de bertson (pag 594,595,596)
+
 l <- NULL
 for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
@@ -64,6 +65,10 @@ for(l in 1:(length(vector_RR)-3)){
   
 }
 
+
+
+
+
 vector_solo_Off =which(vector_flags=="0")
 l<-NULL
 vector_RR_2<-c()
@@ -76,7 +81,6 @@ for(l in 1:(length(vector_solo_Off))){
 Criteria= ((mean(vector_RR_2)-2.9*(IQR(vector_RR_2)/2))/3+3.32*(IQR(vector_RR_2)/2))/2
 
 MED=  3.32*(IQR(vector_RR_2)/2)
-vector_flags=final_flags=rep('0',length(vector_RR))
 
 
 #Algortimo para detectar latidos prematuros
@@ -135,7 +139,7 @@ points(hrv.data$Beat$Time[ vector_solo_ON + 1],
 #Matriz de confusión
 #install.packages('yardstick')
 library('yardstick')
-file_name_anotaciones = "100_Annotations.txt"
+file_name_anotaciones = "113_Annotations.txt"
 tabla_real = read.table(file_name_anotaciones, header =TRUE)
 truth_filtrados_vector<-c()
 m<-NULL
