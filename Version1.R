@@ -112,18 +112,18 @@ MED=  3.32*(IQR(vector_RR_2)/2)
 
 #Algortimo para detectar latidos prematuros
 
-#l<-NULL
-#for(l in 1:(length(vector_RR)-3)){
-#  beat_evaluated = vector_RR[l+1]
-#  if((beat_evaluated-vector_RR[l])<(-MED)){
- #   if((beat_evaluated-vector_RR[l+2])<(-MED)){
- #     vector_flags[l+1]<-"1"
- #     final_flags[l+1]<-" "
-    #}
-  #}else{
-   # vector_flags[l+1]<-"0"
-  #}
-#}
+l<-NULL
+for(l in 1:(length(vector_RR)-3)){
+  beat_evaluated = vector_RR[l+1]
+  if((beat_evaluated-vector_RR[l])<(-MED)){
+    if((beat_evaluated-vector_RR[l+2])<(-MED)){
+      vector_flags[l+1]<-"1"
+    final_flags[l+1]<-" "
+    }
+  }else{
+    vector_flags[l+1]<-"0"
+  }
+}
 
 
 
