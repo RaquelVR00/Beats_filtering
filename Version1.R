@@ -1,7 +1,11 @@
 library("lubridate")
 #Se llamaran a los registros dentro del bucle for para ir aumentando el numero
 #del registro que se quiere analizar
-numero_registro=0
+
+change<-c(0.1,0.15,0.25,0.2,0.25,0.30,0.35,0.40,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1,2,3)
+#Matriz para sumatorio
+
+
 
 #Para calcular la especificidad y la sensibilidad final
 #(Se irá realizando un sumatorio de la sensibilidad y especificidad que se va calculando
@@ -10,14 +14,20 @@ especificidad_final=0
 sensibilidad_final=0
 
 
-setwd("C:/Users/RAQUEL/Desktop/RHRV/RRs")
 #Directorio donde están los archivos rr y ann
+setwd("C:/Users/RAQUEL/Desktop/RHRV/RRs")
+
 
 b<-as.vector(list.files())
 c=length(b)/2
 #En este directorio tengo los archivos de anotaciones y de RR es por ello que
 #es necesario dividir la lenght del directorio entre dos
-
+for (j in 1:length(change)){
+  
+  setwd("C:/Users/RAQUEL/Desktop/RHRV/RRs")
+  numero_registro=0
+  matriz_suma=matrix(0,nrow=2,ncol=2)
+  
 for(i in 1:c){
 
 numero_registro=numero_registro+1
@@ -72,6 +82,7 @@ for(l in 1:(length(vector_RR)-3)){
     vector_flags[l+1] <-("1")
     if(abs(beat_evaluated-vector_RR[l])<Criteria){
       if(beat_evaluated-vector_RR[l+2]<0){
+        #Long beat
         if(abs(vector_RR[l+2]-vector_RR[l+3])<Criteria){
           x <- beat_evaluated/2
           if(x-vector_RR[l+2]<(-Criteria) && x-vector_RR[l]<(-Criteria)){
@@ -81,6 +92,7 @@ for(l in 1:(length(vector_RR)-3)){
         }else{final_flags[l+1]<- "Can not evaluate"}
         
       }else{
+        #Short beat
         if(abs(vector_RR[l+2]-vector_RR[l+3])<Criteria){
           if(vector_RR[l]<vector_RR[l+2]){
             x2=vector_RR[l]+beat_evaluated
@@ -108,6 +120,7 @@ for(l in 1:(length(vector_solo_Off))){
 
 Criteria= ((mean(vector_RR_2)-2.9*(IQR(vector_RR_2)/2))/3+3.32*(IQR(vector_RR_2)/2))/2
 MED=  3.32*(IQR(vector_RR_2)/2)
+MED=MED*change[j]
 
 
 #Algortimo para detectar latidos prematuros
@@ -199,22 +212,43 @@ for(m in 1:length(tabla_real$V3)){
 estimate_filtrados <- vector_flags[1:length(truth_filtrados_vector)]
 df = data.frame('reference' = factor(truth_filtrados_vector, levels=c('0','1')), 'predictions' = factor(estimate_filtrados,levels=c('0','1')))
 
-matriz_confusion = conf_mat(df, truth = reference, estimate = predictions)
+matriz_confusion_tabla = conf_mat(df, truth = reference, estimate = predictions)
 
 #Si comentamos el bucle for e insertamos directamente el nombre del registro 
 #tanto en la linea 180 como en la 25
 #se mostrara la matriz de confusión por pantalla
-matriz_confusion
 
-cm_summary = summary(matriz_confusion)
-especificidad= as.data.frame(cm_summary[cm_summary$.metric=="sens", ".estimate"]) 
-especificidad_final = especificidad_final+especificidad
-sensibilidad = as.data.frame(cm_summary[cm_summary$.metric=="spec", ".estimate"]) 
-sensibilidad_final = sensibilidad_final+sensibilidad
+#cm_summary = summary(matriz_confusion)
+#especificidad= as.data.frame(cm_summary[cm_summary$.metric=="sens", ".estimate"]) 
+#especificidad_final = especificidad_final+especificidad
+#sensibilidad = as.data.frame(cm_summary[cm_summary$.metric=="spec", ".estimate"]) 
+#sensibilidad_final = sensibilidad_final+sensibilidad
+matriz_confusion=as.matrix(matriz_confusion_tabla$table)
+
+matriz_suma=matriz_suma+matriz_confusion
+
+
+}
+  
+
+
+matriz_suma
+sensibilidad=(matriz_suma[2,2]/(matriz_suma[2,2]+matriz_suma[1,2]))*100
+sensibilidad
+especificidad=(matriz_suma[1,1]/(matriz_suma[1,1]+matriz_suma[2,1]))*100
+especificidad
+
+name = paste("Resultados_",change[j],".txt",sep="")
+tabla_datos = data.frame(sensibilidad,especificidad)
+
+name2= paste("Matrices_",change[j],".txt",sep="")
+
+setwd("C:/Users/RAQUEL/Desktop/RHRV/Outputs")
+#Directorio donde deseo guardar la tabla de resultados 
+
+write.table(tabla_datos, file= name)
+write.table(matriz_suma,file=name2)
 
 }
 
-#Mostramos por pantalla la media de la sensibilidad y especificidad obtenida
-#Dividimos entre 74 porque es el número de registros
-sensibilidad_final/74
-especificidad_final/74
+
