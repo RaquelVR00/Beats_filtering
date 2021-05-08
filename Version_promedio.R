@@ -8,7 +8,7 @@ change<-c(0.1,0.15,0.2,0.25,0.30,0.35,0.40,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0
 vector_sensibilidad=vector_especificidad=rep('0',length(change))
 Valor_promedio=0;
 
-Resultados = "Resultados_promedio.txt"
+Resultados = "Resultados_promedio_234.txt"
 #write("Results ", file=Resultados, append=FALSE)
 #cat("This is a log file for Results ", file=Resultados, append=FALSE, sep = "\n")
 
@@ -141,6 +141,8 @@ for (j in 1:length(change)){
     for(l in 1:(length(vector_RR)-3)){
       suma=0
       div=0
+      cont=0
+      comp=0
       beat_evaluated = vector_RR[l+1]
       if(length(vector_solo_Off)>l){
       if(vector_solo_Off[l]<(l+1)){
@@ -165,7 +167,7 @@ for (j in 1:length(change)){
         
       }else{
         for( d in l:1){
-          if(vector_solo_Off[d]==l){
+          if(vector_solo_Off[d]<=l){
             break
           }
         }
@@ -226,12 +228,10 @@ for (j in 1:length(change)){
           }
                            
                   }
-                           promedio=suma/numero_x
+             promedio=suma/numero_x
                           
                          }
                  
-             
-               
       }
     
       
