@@ -196,7 +196,42 @@ for (j in 1:length(change)){
         }
       }
       }else{
-       break
+        #Partimos del ultimo RR normal
+        #Si el ultimo RR normal excede el RR a evaluar else
+        if(vector_solo_Off[length(vector_solo_Off)]<(l+1)){
+         for(r in length(vector_solo_Off):1){
+          suma=vector_RR_2[r]+suma
+         cont=cont+1
+        div=div+1
+        #como no sabemos cuantos habra antes hacemos que cuando lleve 20 acabe el loop
+       if(cont==numero_x){
+         break
+            }
+        }
+        promedio=suma/numero_x
+       }else{
+      #Con este for loop buscamos en que posicion está el RR normal anterior al RR a evaluar 
+        for( d in length(vector_solo_Off):1){
+          #Mientras no lo encontremos, o una posicion más pequeña antes, sigue haciendo el if, si no break
+          if(vector_solo_Off[d]<=l){
+             break
+              }
+           }
+           #Hacemos el sumatorio de los numero_X RR normales
+            for(r in d:1){
+             suma=vector_RR_2[r]+suma
+             cont=cont+1
+             if(cont==numero_x){
+              break
+          }
+                           
+                  }
+                           promedio=suma/numero_x
+                          
+                         }
+                 
+             
+               
       }
     
       
