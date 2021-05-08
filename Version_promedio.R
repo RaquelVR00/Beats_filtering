@@ -8,7 +8,7 @@ change<-c(0.1,0.15,0.2,0.25,0.30,0.35,0.40,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0
 vector_sensibilidad=vector_especificidad=rep('0',length(change))
 Valor_promedio=0;
 
-Resultados = "Resultados_promedio_234.txt"
+Resultados = "Resultados_promedio.txt"
 #write("Results ", file=Resultados, append=FALSE)
 #cat("This is a log file for Results ", file=Resultados, append=FALSE, sep = "\n")
 

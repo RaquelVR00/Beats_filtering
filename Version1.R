@@ -8,7 +8,7 @@ change<-c(0.1,0.15,0.2,0.25,0.30,0.35,0.40,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0
 vector_sensibilidad=vector_especificidad=rep('0',length(change))
 
 
-Resultados = "Resultados_posterior_2.txt"
+Resultados = "Resultados.txt"
 #write("Results ", file=Resultados, append=FALSE)
 
 cat("This is a log file for Results ", file=Resultados, append=FALSE, sep = "\n")
@@ -136,10 +136,10 @@ l<-NULL
 for(l in 1:(length(vector_RR)-3)){
   beat_evaluated = vector_RR[l+1]
   if((beat_evaluated-vector_RR[l])<(-MED)){
-  #  if((beat_evaluated-vector_RR[l+2])<(-MED)){
+    if((beat_evaluated-vector_RR[l+2])<(-MED)){
       vector_flags[l+1]<-"1"
     final_flags[l+1]<-" "
-  #  }
+    }
   }else{
     vector_flags[l+1]<-"0"
   }
