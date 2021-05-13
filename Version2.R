@@ -5,6 +5,14 @@ library("lubridate")
 
 change<-c(0.1,0.15,0.25,0.2,0.25,0.30,0.35,0.40,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1,2,3)
 
+vector_sensibilidad=vector_especificidad=rep('0',length(change))
+
+
+Resultados = "ResultadosV2.txt"
+#write("Results ", file=Resultados, append=FALSE)
+
+cat("This is a log file for Results ", file=Resultados, append=FALSE, sep = "\n")
+
 
 #Matriz para sumatorio
 
@@ -246,14 +254,33 @@ especificidad=(matriz_suma[1,1]/(matriz_suma[1,1]+matriz_suma[2,1]))*100
 especificidad
 
 name = paste("Resultados_",change[j],"_V2",".txt",sep="")
-tabla_datos = data.frame(sensibilidad,especificidad)
 
-name2= paste("Matrices_",change[j],"_V2",".txt",sep="")
+vector_especificidad[j]= especificidad
+vector_sensibilidad[j]= sensibilidad
+
 
 setwd("C:/Users/RAQUEL/Desktop/RHRV/Outputs")
 #Directorio donde deseo guardar la tabla de resultados 
 
-write.table(tabla_datos, file= name)
-write.table(matriz_suma,file=name2)
+#Directorio donde deseo guardar la tabla de resultados 
+matriz_suma
+
+#write(name, file=Resultados, append=TRUE)
+cat(name, file=Resultados, append=TRUE, sep = "\n")
+cat("especificidad", file=Resultados, append=TRUE, sep = "\n")
+cat(especificidad, file=Resultados, append=TRUE, sep = "\n")
+cat("sensibilidad", file=Resultados, append=TRUE, sep = "\n")
+cat(sensibilidad, file=Resultados, append=TRUE, sep = "\n")
+cat(matriz_suma, file=Resultados, append=TRUE)
+cat(" ", file=Resultados, append=TRUE, sep = "\n")
+cat(" ", file=Resultados, append=TRUE, sep = "\n")
 
 }
+
+par(mfrow=c(1,2))
+plot(change,vector_sensibilidad,type = "l",col="blue",ylab="sensibilidad",xlab="n*MED")
+plot(change,vector_especificidad,type = "l",col="red",ylab="especificidad",xlab="n*MED")
+
+par(mfrow=c(1,2))
+plot(change,vector_sensibilidad,type = "l",col="blue",ylab="sensibilidad",xlab="n*MED")
+plot(change,vector_especificidad,type = "l",col="red",ylab="especificidad",xlab="n*MED")
