@@ -13,7 +13,7 @@ tamano=60
 vector_sensibilidad=vector_especificidad=rep('0',length(change))
 Valor_promedio=0;
 
-Resultados = "Resultados_promedio_ventana_cambiante_3.txt"
+Resultados = "Resultados_promedio_ventana_cambiante_veamos.txt"
 #write("Results ", file=Resultados, append=FALSE)
 #cat("This is a log file for Results ", file=Resultados, append=FALSE, sep = "\n")
 
@@ -151,92 +151,28 @@ while(tamano!=0){
           cont=0
           comp=0
           beat_evaluated = vector_RR[l+1]
-          if(length(vector_RR_2)>l){
-            if(vector_solo_Off[l]<(l+1)){
-              if(l>anterior){
-                cont=0
-                for(r in l:1){
-                  suma=vector_RR_2[r]+suma
-                  cont=cont+1
-                  div=div+1
-                  if(cont==anterior){
-                    break
-                  }
-                }
-              }else{
-                for(r in l:1){
-                  suma=vector_RR_2[r]+suma
-                  div=div+1
-                }
-              }
-              #En caso de que existan suficientes latidos anteriores aqui ya hemos calculado lo anterior 
-            }else{
-              for( d in l:1){
-                if(vector_solo_Off[d]<=l){
-                  break
-                }
-              }
-              comp=0
-              for( o in 1:d){
-                if(vector_solo_Off[o]){
-                  comp=comp+1
-                }
-              }
-              if(comp>=anterior){
-                cont=0
-                for(r in d:1){
-                  suma=vector_RR_2[r]+suma
-                  cont=cont+1
-                  
-                  if(cont==anterior){
-                    break
-                  }
-                  
-                }
-                #promedio=suma/numero_x
-              }else{
-                for(g in d:1){
-                  suma=vector_RR_2[g]+suma
-                  div=div+1
-                }
-              }
-            }
+          for(u in length(vector_RR_2):1){
             
-          }else{
-            #Partimos del ultimo RR normal
-            #Si el ultimo RR normal excede el RR a evaluar else
-            if(vector_solo_Off[length(vector_solo_Off)]<(l+1)){
-              for(r in length(vector_RR_2):1){
-                suma=vector_RR_2[r]+suma
-                cont=cont+1
-                div=div+1
-                #como no sabemos cuantos habra antes hacemos que cuando lleve 20 acabe el loop
-                if(cont==anterior){
-                  break
-                }
-              }
-              # promedio=suma/numero_x
-            }else{
-              #Con este for loop buscamos en que posicion está el RR normal anterior al RR a evaluar 
-              for( d in length(vector_RR_2):1){
-                #Mientras no lo encontremos, o una posicion más pequeña antes, sigue haciendo el if, si no break
-                if(vector_solo_Off[d]<=l){
-                  break
-                }
-              }
-              #Hacemos el sumatorio de los numero_X RR normales
-              for(r in d:1){
-                suma=vector_RR_2[r]+suma
-                cont=cont+1
-                if(cont==anterior){
-                  break
-                }
-                
-              }
-              
+            if(vector_solo_Off[u]<(l+1)){
+              break
             }
-            
           }
+          if(u>=anterior){
+            
+            for(r in (u):1){
+              suma=vector_RR_2[r]+suma
+              cont=cont+1
+              if(cont==anterior){
+                break
+              }
+            }
+          }else{
+            for(r in (u):1){
+              suma=vector_RR_2[r]+suma
+            }
+          }
+          
+          
           
           #Coger los siguientes en la ventana
           
