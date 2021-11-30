@@ -198,7 +198,7 @@ Resultados= "ResultadoTotal.txt"
 sensibilidad_final=(matriz_suma[2,2]/(matriz_suma[2,2]+matriz_suma[1,2]))*100            
 especificidad_final=(matriz_suma[1,1]/(matriz_suma[1,1]+matriz_suma[2,1]))*100
 
-cat(name, file=Resultados, append=TRUE, sep = "\n")
+
 cat("Especificidad", file=Resultados, append=TRUE, sep = "\n")
 cat(especificidad_final, file=Resultados, append=TRUE, sep = "\n")
 cat("Sensibilidad", file=Resultados, append=TRUE, sep = "\n")
@@ -214,7 +214,7 @@ cat(" ", file=Resultados, append=TRUE, sep = "\n")
 sensibilidad_final2=(matriz_suma2[2,2]/(matriz_suma2[2,2]+matriz_suma2[1,2]))*100            
 especificidad_final2=(matriz_suma2[1,1]/(matriz_suma2[1,1]+matriz_suma2[2,1]))*100
 
-cat(name, file=Resultados, append=TRUE, sep = "\n")
+
 cat("Especificidad_adapted", file=Resultados, append=TRUE, sep = "\n")
 cat(especificidad_final2, file=Resultados, append=TRUE, sep = "\n")
 cat("Sensibilidad_adapted", file=Resultados, append=TRUE, sep = "\n")
