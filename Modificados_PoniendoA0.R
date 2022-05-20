@@ -6,7 +6,7 @@ library('yardstick')
 numero_registro = 0
 
 #Carpeta donde estan los RRs modificados
-setwd("C:/Users/RAQUEL/Desktop/RHRV/Modificados")
+setwd("C:/Users/RAQUEL/Desktop/RHRV/Modificados_ventricular/Modificados3")
 change=0.3
 anterior=40
 siguiente=160
@@ -27,12 +27,12 @@ matriz_suma=matrix(0,nrow=2,ncol=2)
 matriz_suma2=matrix(0,nrow=2,ncol=2)
 matriz_suma3=matrix(0,nrow=2,ncol=2)
 matriz_suma4=matrix(0,nrow=2,ncol=2)
-
+matriz_suma5=matrix(0,nrow=2,ncol=2)
 
 
 #Recorro todos los archivos
 for( j in 1:c){
-  setwd("C:/Users/RAQUEL/Desktop/RHRV/Modificados")
+  setwd("C:/Users/RAQUEL/Desktop/RHRV/Modificados_ventricular/Modificados3")
   numero_registro=numero_registro+1
   #Funcionara para ir llamando a los archivos 
   
@@ -53,6 +53,8 @@ for( j in 1:c){
   anotaciones_modificados_adapted<-tabla_modificados$V5
   #Vector D
   anotaciones_D <-tabla_modificados$V6
+  #Vector V
+  anotaciones_V<-tabla_modificados$V7
   vector_flags=final_flags=rep('0',length(vector_RR))
   
   #Pasar  por Berntson
@@ -118,7 +120,7 @@ for( j in 1:c){
   MED=  3.32*(IQR(vector_RR_2)/2)
   MED=MED*change
   
-  vector_flags=rep('0',length(vector_RR))
+  #vector_flags=rep('0',length(vector_RR))
   
   #Algortimo para detectar latidos prematuros
   
@@ -199,11 +201,11 @@ for( j in 1:c){
   name = paste("Tabla_filtrados_",nombre_file,".txt",sep="")
   tabla_datos = data.frame(vector_RR,vector_flags,anotaciones_solo_modificados,anotaciones_modificados_adapted)
   
-  setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_ventana_ajustada")
+  setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_sinlimpiar2")
   #Directorio donde deseo guardar la tabla de resultados 
   
   write.table(tabla_datos, file= name)
-  setwd("C:/Users/RAQUEL/Desktop/RHRV/Modificados")
+  setwd("C:/Users/RAQUEL/Desktop/RHRV/Modificados_ventricular/Modificados3")
   
   
   
@@ -247,6 +249,15 @@ for( j in 1:c){
   
   
   matriz_suma3=matriz_suma3+matriz_confusion_4
+  #Vector anotaciones V
+  df = data.frame('reference' = factor(anotaciones_V, levels=c('0','1')), 'predictions' = factor(estimate_filtrados,levels=c('0','1')))
+  
+  matriz_confusion_tabla_5 = conf_mat(df, truth = reference, estimate = predictions)
+  
+  matriz_confusion_5=as.matrix(matriz_confusion_tabla_5$table)
+  
+  
+  matriz_suma4=matriz_suma4+matriz_confusion_5
   
   
   
@@ -270,8 +281,13 @@ for( j in 1:c){
   sensibilidad_4=(matriz_confusion_4[2,2]/(matriz_confusion_4[2,2]+matriz_confusion_4[1,2]))*100            
   especificidad_4=(matriz_confusion_4[1,1]/(matriz_confusion_4[1,1]+matriz_confusion_4[2,1]))*100
   
+  #Vector V
   
-  setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_ventana_ajustada")
+  sensibilidad_5=(matriz_confusion_5[2,2]/(matriz_confusion_5[2,2]+matriz_confusion_5[1,2]))*100            
+  especificidad_5=(matriz_confusion_5[1,1]/(matriz_confusion_5[1,1]+matriz_confusion_5[2,1]))*100
+  
+  
+  setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_sinlimpiar2")
   #Directorio donde deseo guardar la tabla de resultados 
   
   #Genero un archivo para cada archivo de la base de datos
@@ -306,11 +322,15 @@ for( j in 1:c){
   cat(matriz_confusion_4, file=Resultados, append=TRUE)
   cat(" ", file=Resultados, append=TRUE, sep = "\n")
   cat(" ", file=Resultados, append=TRUE, sep = "\n")
-  
+  cat("sensibilidad_modificados_V", file=Resultados, append=TRUE, sep = "\n")
+  cat(sensibilidad_5, file=Resultados, append=TRUE, sep = "\n")
+  cat(matriz_confusion_5, file=Resultados, append=TRUE)
+  cat(" ", file=Resultados, append=TRUE, sep = "\n")
+  cat(" ", file=Resultados, append=TRUE, sep = "\n")
   
   
 }
-setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_limpiando")
+setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_sinlimpiar2")
 #Directorio donde deseo guardar la tabla de resultados 
 #Genero un archivo que permita una vista generica del comportamiento del algoritmo 
 
@@ -373,8 +393,19 @@ cat("Sensibilidad_adapted_D", file=Resultados, append=TRUE, sep = "\n")
 cat(sensibilidad_final4, file=Resultados, append=TRUE, sep = "\n")
 cat("Matriz_suma_total_adapted", file=Resultados, append=TRUE, sep = "\n")
 cat(matriz_suma3, file=Resultados, append=TRUE, sep = "\n")
+cat(" ", file=Resultados, append=TRUE, sep = "\n")
+
+#vector V
+
+sensibilidad_final5=(matriz_suma4[2,2]/(matriz_suma4[2,2]+matriz_suma4[1,2]))*100            
+especificidad_final5=(matriz_suma4[1,1]/(matriz_suma4[1,1]+matriz_suma4[2,1]))*100
 
 
-
+cat("Especificidad_adapted_V", file=Resultados, append=TRUE, sep = "\n")
+cat(especificidad_final5, file=Resultados, append=TRUE, sep = "\n")
+cat("Sensibilidad_adapted_V", file=Resultados, append=TRUE, sep = "\n")
+cat(sensibilidad_final5, file=Resultados, append=TRUE, sep = "\n")
+cat("Matriz_suma_total_adapted", file=Resultados, append=TRUE, sep = "\n")
+cat(matriz_suma4, file=Resultados, append=TRUE, sep = "\n")
 
 
