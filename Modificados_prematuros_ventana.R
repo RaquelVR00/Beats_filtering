@@ -60,7 +60,8 @@ for( j in 1:c){
   #Pasar  por Berntson
   #Ahora que tengo el vector_RR que contiene el tiempo que transcurre entre los
   #latidos calculo los criterios necesarios para evaluar despues los latidos
-  #Maximum expected beat MED= 3.32*(IQR(vector_RR)/2)
+  #Maximum expected beat
+  MED= 3.32*(IQR(vector_RR)/2)
   #Minimum artifact difference 
   #SEB= mean(vector_RR)-2.9*(IQR(vector_RR)/2) #Shortest veridical beat
   #MAD=SEB/3
@@ -68,7 +69,6 @@ for( j in 1:c){
   
   
   #Algoritmo de bertson (pag 594,595,596)
-  
   l<-NULL
   for(l in 1:(length(vector_RR)-3)){
     contador=0
@@ -99,11 +99,10 @@ for( j in 1:c){
         contador=contador+1
       }
     }
-    
     if(contador<tamano){
-      promedio=suma/contador
+      promedio=suma_total/contador
     }else{
-      promedio=suma/tamano
+      promedio=suma_total/tamano
     }
     
     if(is.na(beat_evaluated-promedio)){
@@ -120,12 +119,7 @@ for( j in 1:c){
     }
   }
   
-  
-  
-  
-  
-  
-  
+
   
   #Generar especificidad y sensibilidad
   
@@ -270,7 +264,7 @@ setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_pre")
 #Genero un archivo que permita una vista generica del comportamiento del algoritmo 
 
 
-Resultados= "ResultadoTotal.txt"
+Resultados= "ResultadoTotal8.txt"
 
 #Vector A
 sensibilidad_final=(matriz_suma0[2,2]/(matriz_suma0[2,2]+matriz_suma0[1,2]))*100            
