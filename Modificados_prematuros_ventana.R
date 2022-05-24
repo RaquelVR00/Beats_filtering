@@ -62,6 +62,7 @@ for( j in 1:c){
   #latidos calculo los criterios necesarios para evaluar despues los latidos
   #Maximum expected beat
   MED= 3.32*(IQR(vector_RR)/2)
+  MED=MED*0.3
   #Minimum artifact difference 
   #SEB= mean(vector_RR)-2.9*(IQR(vector_RR)/2) #Shortest veridical beat
   #MAD=SEB/3
@@ -264,7 +265,7 @@ setwd("C:/Users/RAQUEL/Desktop/RHRV/resultados_pre")
 #Genero un archivo que permita una vista generica del comportamiento del algoritmo 
 
 
-Resultados= "ResultadoTotal8.txt"
+Resultados= "ResultadoTotal11.txt"
 
 #Vector A
 sensibilidad_final=(matriz_suma0[2,2]/(matriz_suma0[2,2]+matriz_suma0[1,2]))*100            
